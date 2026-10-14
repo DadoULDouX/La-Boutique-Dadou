@@ -1,0 +1,12 @@
+{
+  "name": "La boutique à Dadou",
+  "short_name": "Boutique Dadou",
+  "description": "Suivi privé des achats, stocks et ventes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f3ee",
+  "theme_color": "#1f211e",
+  "icons": [
+    {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

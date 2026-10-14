@@ -1,0 +1,4 @@
+[project]
+name = "la-boutique-a-dadou-web"
+version = "1.0.0"
+requires-python = ">=3.12"

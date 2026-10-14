@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.vercel/
+.env*
+!.env.example
+*.sqlite3
+*.zip
+dadou_import.sql
+.venv/
+.testdeps/
+*.sqlite3-*
+*.db
+*.db-*
+backups/

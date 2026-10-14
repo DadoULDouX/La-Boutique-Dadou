@@ -1,0 +1,12 @@
+.env*
+!.env.example
+*.sqlite3
+dadou_import.sql
+scripts/
+sql/
+__pycache__/
+**/__pycache__/
+*.pyc
+.git/
+.venv/
+.testdeps/

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1f211e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>La boutique à Dadou</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="auth" class="auth-shell hidden">
+    <section class="auth-brand">
+      <div class="brand-mark large">D</div>
+      <p class="eyebrow">GESTION PRIVÉE</p>
+      <h1>La boutique<br>à Dadou</h1>
+      <p>Votre activité, claire aujourd’hui.<br>Prête pour demain.</p>
+      <div class="auth-proof"><span>●</span> Données synchronisées entre vos appareils</div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-card">
+        <p class="eyebrow accent">ESPACE PRIVÉ</p>
+        <h2 id="auth-title">Bienvenue</h2>
+        <p id="auth-copy" class="muted">Saisissez votre mot de passe pour accéder à votre boutique.</p>
+        <form id="auth-form" class="stack-form">
+          <label>Mot de passe<input id="auth-password" type="password" minlength="8" autocomplete="current-password" required></label>
+          <button class="btn primary wide" type="submit">Accéder à ma boutique <span>→</span></button>
+        </form>
+        <button id="recover-toggle" class="text-btn" type="button">Utiliser mon code de récupération</button>
+        <form id="recover-form" class="stack-form hidden">
+          <label>Code de récupération<input id="recovery-code" type="text" placeholder="XXXX-XXXX-XXXX-XXXX"></label>
+          <label>Nouveau mot de passe<input id="recovery-password" type="password" minlength="8"></label>
+          <button class="btn secondary wide" type="submit">Définir le nouveau mot de passe</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="logo"><div class="brand-mark">D</div><div><strong>La boutique</strong><span>à Dadou</span></div></div>
+      <nav id="nav">
+        <button data-view="dashboard" class="active"><i>⌂</i><span>Vue d’ensemble</span></button>
+        <button data-view="items"><i>◇</i><span>Mes articles</span><b id="nav-stock">0</b></button>
+        <button data-view="top"><i>↗</i><span>Top ventes</span></button>
+        <button data-view="watch"><i>◎</i><span>À rechercher</span><b id="nav-watch">0</b></button>
+        <button data-view="accounting"><i>▤</i><span>Comptabilité</span></button>
+        <button data-view="telegram"><i>✈</i><span>Telegram</span><b id="telegram-nav-dot">!</b></button>
+        <div class="nav-sep"></div>
+        <button data-view="projections"><i>◫</i><span>Projections</span><em>Bientôt</em></button>
+      </nav>
+      <div class="sidebar-foot">
+        <button id="backup-btn"><i>↓</i><span>Sauvegarder</span></button>
+        <div class="local-pill"><span></span> Données locales</div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button id="mobile-menu" class="icon-btn mobile-only">☰</button>
+        <div id="page-heading"><p class="eyebrow">TABLEAU DE BORD</p><h1>Bonjour Dadou <span>👋</span></h1></div>
+        <div class="header-actions">
+          <div class="global-search"><span>⌕</span><input id="global-search" placeholder="Rechercher un article, un n° de série…"><kbd>⌘ K</kbd></div>
+          <button id="quick-add" class="btn primary">＋ Nouvel article</button>
+          <button id="lock-btn" class="avatar" title="Verrouiller">D</button>
+        </div>
+      </header>
+
+      <section id="dashboard-view" class="view active">
+        <div class="view-toolbar">
+          <div><h2>Votre activité en un coup d’œil</h2><p class="muted">Les chiffres réels de votre boutique, sans projection fiscale.</p></div>
+          <div class="period-controls"><select id="dash-year"></select><select id="dash-month"></select></div>
+        </div>
+        <div id="year-kpis" class="kpi-grid"></div>
+        <div class="dashboard-grid">
+          <article class="card chart-card wide-card">
+            <div class="card-head"><div><p class="eyebrow">PERFORMANCE ANNUELLE</p><h3>Achats, ventes & marge</h3></div><div class="legend"><span class="dot purchases"></span>Achats <span class="dot revenue"></span>Ventes <span class="dot margin"></span>Marge</div></div>
+            <div id="bar-chart" class="bar-chart"></div>
+          </article>
+          <article class="card platform-card">
+            <div class="card-head"><div><p class="eyebrow">CANAUX DE VENTE</p><h3>Répartition par plateforme</h3></div></div>
+            <div id="donut-wrap" class="donut-wrap"></div>
+          </article>
+          <article class="card month-card">
+            <div class="card-head"><div><p class="eyebrow">MOIS SÉLECTIONNÉ</p><h3 id="month-title">Ce mois-ci</h3></div></div>
+            <div id="month-kpis" class="mini-kpis"></div>
+          </article>
+          <article class="card activity-card">
+            <div class="card-head"><div><p class="eyebrow">DERNIÈRES OPÉRATIONS</p><h3>Activité récente</h3></div><button class="text-btn" data-go="accounting">Voir le livre →</button></div>
+            <div id="recent-list" class="recent-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="items-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">INVENTAIRE</p><h2>Mes articles</h2><p class="muted">Retrouvez, suivez et mettez à jour chaque article.</p></div><button class="btn primary" data-add>＋ Ajouter un article</button></div>
+        <div class="filterbar"><div class="inline-search"><span>⌕</span><input id="items-search" placeholder="Désignation, série, observation…"></div><select id="items-status"><option value="">Tous les statuts</option><option value="en_vente">En vente</option><option value="reserve">Réservé</option><option value="vente_en_cours">Vente en cours</option><option value="vente_finalisee">Vente finalisée</option><option value="retire">Retiré</option></select><select id="items-category"><option value="">Toutes les catégories</option></select></div>
+        <div id="items-groups" class="items-groups"></div>
+        <div id="items-empty" class="card empty hidden"></div>
+      </section>
+
+      <section id="top-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">ANALYSE</p><h2>Top ventes</h2><p class="muted">Les produits qui méritent votre attention — et peut-être un nouvel achat.</p></div></div>
+        <div class="filterbar"><div class="segmented" id="top-sort"><button data-sort="opportunity" class="active">Meilleures opportunités</button><button data-sort="margin">Plus rentables</button><button data-sort="speed">Plus rapides</button></div><select id="top-platform"><option value="">Toutes plateformes</option><option>Vinted</option><option>Leboncoin</option><option>eBay</option><option>Autre</option></select></div>
+        <div id="top-summary" class="top-summary"></div>
+        <div id="top-grid" class="top-grid"></div>
+        <div class="section-heading"><div><p class="eyebrow">RÉCURRENCE</p><h3>Produits confirmés</h3></div><p class="muted">Au moins deux ventes enregistrées</p></div>
+        <div id="repeat-grid" class="repeat-grid"></div>
+      </section>
+
+      <section id="watch-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">SOURCING</p><h2>À rechercher de nouveau</h2><p class="muted">Préparez aujourd’hui les recherches automatiques de demain.</p></div></div>
+        <div class="future-banner"><div class="future-icon">◎</div><div><strong>Prêt pour l’automatisation</strong><p>Vos critères sont structurés pour accueillir plus tard les connecteurs Vinted, Leboncoin et eBay.</p></div><span>ÉVOLUTION PRÉVUE</span></div>
+        <div id="watch-grid" class="watch-grid"></div>
+      </section>
+
+      <section id="accounting-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">LIVRE DE COMPTE</p><h2>Comptabilité</h2><p class="muted">Toutes vos opérations, ordonnées et exportables.</p></div><div class="export-actions"><button id="export-csv" class="btn secondary">↓ CSV</button><button id="export-pdf" class="btn secondary">↓ PDF</button><button id="export-xlsx" class="btn primary">↓ Exporter Excel</button></div></div>
+        <div class="filterbar accounting-filters"><label>Du<input id="accounting-start" type="date"></label><label>Au<input id="accounting-end" type="date"></label><select id="accounting-platform"><option value="">Toutes plateformes</option><option>Vinted</option><option>Leboncoin</option><option>eBay</option><option>Autre</option></select><select id="accounting-kind"><option value="all">Achats et ventes</option><option value="achat">Achats uniquement</option><option value="vente">Ventes uniquement</option></select><button id="accounting-apply" class="btn secondary">Appliquer</button></div>
+        <div id="accounting-kpis" class="accounting-kpis"></div>
+        <div class="card table-card"><div class="table-scroll"><table><thead><tr><th>Date</th><th>Type</th><th>Référence</th><th>Article</th><th>Catégorie</th><th>Plateforme</th><th>Montant</th><th>Marge</th></tr></thead><tbody id="accounting-tbody"></tbody></table></div></div>
+      </section>
+
+      <section id="projections-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">SIMULATION</p><h2>Projections professionnelles</h2><p class="muted">Un espace séparé du tableau de bord réel, comme convenu.</p></div></div>
+        <div class="coming-card"><div class="future-icon">◫</div><p class="eyebrow accent">PROCHAINE ÉTAPE</p><h2>Préparer le passage au professionnel</h2><p>Comparez prochainement votre activité personnelle, la micro-entreprise et la société, sans jamais mélanger estimations fiscales et résultats réels.</p><div class="coming-features"><span>Revenu disponible estimé</span><span>Cotisations configurables</span><span>Objectif mensuel</span><span>Scénarios comparatifs</span></div></div>
+      </section>
+
+      <section id="telegram-view" class="view">
+        <div class="view-toolbar"><div><p class="eyebrow">AUTOMATISATION MOBILE</p><h2>Telegram</h2><p class="muted">Pilotez les opérations essentielles depuis votre téléphone.</p></div><span id="telegram-status-pill" class="status retire">Non configuré</span></div>
+        <div class="telegram-layout">
+          <article class="card telegram-setup">
+            <div class="step-number">1</div>
+            <p class="eyebrow accent">CRÉER LE BOT</p>
+            <h3>Obtenir votre jeton Telegram</h3>
+            <ol>
+              <li>Dans Telegram, ouvrez la conversation avec <strong>@BotFather</strong>.</li>
+              <li>Envoyez <code>/newbot</code> et suivez ses instructions.</li>
+              <li>Copiez le jeton transmis par BotFather.</li>
+            </ol>
+            <form id="telegram-token-form" class="stack-form">
+              <label>Jeton du bot<input id="telegram-token" type="password" autocomplete="off" placeholder="123456789:AA…"></label>
+              <button class="btn primary" type="submit">Connecter le bot</button>
+            </form>
+            <p class="security-note">🔒 Le jeton est chiffré par votre compte Windows et reste sur cet ordinateur.</p>
+          </article>
+          <article class="card telegram-pair">
+            <div class="step-number">2</div>
+            <p class="eyebrow accent">ASSOCIER VOTRE COMPTE</p>
+            <h3>Lier votre Telegram personnel</h3>
+            <p class="muted">Une fois le bot connecté, générez un code puis envoyez-le au bot. Le code expire après 10 minutes.</p>
+            <div id="telegram-bot-link" class="bot-link hidden"></div>
+            <button id="telegram-pair-btn" class="btn secondary wide" disabled>Générer un code d’association</button>
+            <div id="telegram-pair-code" class="pair-code hidden"></div>
+          </article>
+          <article class="card telegram-commands">
+            <p class="eyebrow">COMMANDES DISPONIBLES</p><h3>Ce que vous pourrez faire</h3>
+            <div class="command-list">
+              <div><code>/stock</code><span>Voir les articles disponibles</span></div>
+              <div><code>/encours</code><span>Afficher et finaliser les ventes</span></div>
+              <div><code>/stats</code><span>Consulter les résultats du mois</span></div>
+              <div><code>/chercher texte</code><span>Retrouver un article</span></div>
+              <div><code>/vendre CODE PRIX PLATEFORME</code><span>Passer une vente en cours</span></div>
+              <div><code>/finaliser CODE</code><span>Finaliser avec confirmation</span></div>
+            </div>
+          </article>
+          <article class="card telegram-health">
+            <p class="eyebrow">ÉTAT DU SERVICE</p><h3 id="telegram-health-title">En attente de configuration</h3>
+            <p id="telegram-health-copy" class="muted">Le bot fonctionnera tant que La boutique à Dadou restera ouverte sur cet ordinateur.</p>
+            <button id="telegram-disable" class="btn danger hidden">Désactiver Telegram</button>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden"><div class="modal-backdrop" data-close></div><div class="modal-panel"><button class="modal-close" data-close>×</button><div id="modal-content"></div></div></div>
+  <div id="toast-zone" class="toast-zone"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
