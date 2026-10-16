@@ -18,8 +18,20 @@ async function api(path,options={}){
   return data;
 }
 function toast(message,error=false){const el=document.createElement('div');el.className='toast'+(error?' error':'');el.textContent=message;$('#toast-zone').append(el);setTimeout(()=>el.remove(),3800)}
-function openModal(html){$('#modal-content').innerHTML=html;$('#modal').classList.remove('hidden')}
-function closeModal(){$('#modal').classList.add('hidden');$('#modal-content').innerHTML=''}
+function openModal(html){
+  $('#modal-content').innerHTML=html;
+  $('#modal').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}
+function closeModal(){
+  // Safari iOS conserve parfois le zoom appliqué à un champ encore actif.
+  // Retirer le focus avant de masquer la modale rend immédiatement le
+  // tableau de bord à sa largeur normale.
+  if($('#modal').contains(document.activeElement))document.activeElement.blur();
+  $('#modal').classList.add('hidden');
+  $('#modal-content').innerHTML='';
+  document.body.classList.remove('modal-open');
+}
 document.addEventListener('click',e=>{if(e.target.matches('[data-close]'))closeModal();});
 
 async function boot(){
